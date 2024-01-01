@@ -34,5 +34,7 @@ jobs:
               run: |
                 pip install -r requirements.txt
             - name: Run pipeline
+              env:
+                CHROME_BIN: ${{ steps.setup-chrome.outputs.chrome-path }}
               run: |
                 python monthly_feature_pipeline.py

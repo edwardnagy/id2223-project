@@ -70,7 +70,7 @@ def initialize_driver() -> webdriver.Remote:
         chrome_options.add_argument('--remote-debugging-port=9222')
         chrome_options.add_argument('--disable-gpu')
         chrome_options.add_argument('--headless')
-        chrome_options.binary_location = "/usr/bin/google-chrome"
+        chrome_options.binary_location = os.getenv("CHROME_BIN")
         driver = webdriver.Chrome(service=service, options=chrome_options)
     else:
         driver = webdriver.Chrome()
