@@ -26,7 +26,7 @@ jobs:
                     ${{ runner.os }}-pip-
             - uses: actions/setup-python@v3
               with:
-                python-version: '3.10.13'
+                python-version: '3.11.5'
             - name: Install dependencies
               run: |
                 pip install -r requirements.txt
