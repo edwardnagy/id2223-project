@@ -1,5 +1,6 @@
 from datetime import date, datetime
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -7,6 +8,9 @@ import time
 import hopsworks
 from hsfs import feature_group as fg
 import pandas as pd
+import os
+
+is_ci_env = os.getenv("GITHUB_ACTIONS") == "true"
 
 
 def get_past_month_search_link():
@@ -60,7 +64,11 @@ def save_papers_to_feature_group(feature_group: fg.FeatureGroup, papers: list[Pa
 
 
 def initialize_driver() -> webdriver.Remote:
-    driver = webdriver.Chrome()
+    if is_ci_env:
+        service = Service(executable_path="/usr/local/bin/chromedriver")
+        driver = webdriver.Chrome(service=service)
+    else:
+        driver = webdriver.Chrome()
     return driver
 
 
