@@ -4,19 +4,41 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
+import hopsworks
+from hsfs import feature_group as fg
+import pandas as pd
 
-# TODO: Set ChromeDriver path
-driver_path = "/path/to/chromedriver"
 # TODO: Set search link to search for last month's papers
-search_link = "https://dl.acm.org/action/doSearch?fillQuickSearch=false&target=advanced&ConceptID=1994&expand=all&field1=AllField&text1=BMW&startPage=0&pageSize=10"
+search_link = "https://dl.acm.org/topic/ccs2012/10010147.10010257.10010258.10010259.10010263?expand=all&EpubDate=%5B20230101+TO+202401012359%5D&queryID=54/6448494997&pageSize=50&startPage=0&sortBy=EpubDate_asc"
 
 
-def save_paper(abstract: str, publication_date: date, citation: str):
-    print("Saving paper...")
-    print(f"Abstract: {abstract}")
-    print(f"Publication date: {publication_date}")
-    print(f"Citation: {citation}")
-    print("Paper saved!")
+class Paper:
+    def __init__(self, abstract: str, publication_date: date, citation: str):
+        self.abstract = abstract
+        self.publication_date = publication_date
+        self.citation = citation
+
+    def __str__(self):
+        return f"Paper(abstract={self.abstract}, publication_date={self.publication_date}, citation={self.citation})"
+
+
+def initialize_feature_group():
+    project = hopsworks.login()
+    fs = project.get_feature_store()
+    acm_papers_fg = fs.get_feature_group("acm_papers", 1)
+    return acm_papers_fg
+
+
+def save_papers_to_feature_group(feature_group: fg.FeatureGroup, papers: list[Paper]):
+    print("Saving papers to feature group...")
+    papers_data = {
+        "abstract": map(lambda paper: paper.abstract, papers),
+        "publication_date": map(lambda paper: paper.publication_date, papers),
+        "citation": map(lambda paper: paper.citation, papers),
+    }
+    papers_df = pd.DataFrame(data=papers_data)
+    feature_group.insert(papers_df)
+    print("Papers saved to feature group!")
 
 
 def initialize_driver() -> webdriver.Remote:
@@ -73,16 +95,21 @@ def get_citation_on_paper_page(driver: webdriver.Remote) -> str:
     return citation
 
 
-def scrape_paper_on_paper_page(driver: webdriver.Remote):
+def get_paper_on_paper_page(driver: webdriver.Remote) -> Paper:
     # Get necessary information
     abstract: str = get_abstract_on_paper_page(driver)
     publication_date: date = get_publication_date_on_paper_page(driver)
     citation: str = get_citation_on_paper_page(driver)
-    # Save the paper
-    save_paper(abstract, publication_date, citation)
+    paper = Paper(abstract, publication_date, citation)
+
+    return paper
 
 
-def scrape_papers_on_search_page(driver: webdriver.Remote):
+def scrape_papers_on_search_page(
+    driver: webdriver.Remote, feature_group: fg.FeatureGroup
+):
+    print(f"Scraping papers on search page: {driver.current_url}")
+
     # Get all search results
     search_results = WebDriverWait(driver, 10).until(
         EC.visibility_of_all_elements_located((By.CLASS_NAME, "issue-item__content"))
@@ -94,19 +121,24 @@ def scrape_papers_on_search_page(driver: webdriver.Remote):
         paper_link = title_span.find_element(By.TAG_NAME, "a").get_attribute("href")
         paper_links.append(paper_link)
     # Scrape each paper
+    papers = []
     for paper_link in paper_links:
+        print(f"Scraping paper on paper page: {paper_link}")
         driver.get(paper_link)
-        scrape_paper_on_paper_page(driver)
+        paper = get_paper_on_paper_page(driver)
+        print(f"Paper scraped: {paper_link}")
+        papers.append(paper)
+    # Save the papers
+    save_papers_to_feature_group(feature_group, papers)
 
 
-def scrape_papers_by_search_link(search_link: str):
+def scrape_papers_by_search_link(search_link: str, feature_group: fg.FeatureGroup):
     driver: webdriver.Remote = initialize_driver()
 
     current_page = search_link
     while current_page is not None:
-        print(f"Scraping page: {current_page}")
         driver.get(current_page)
-        scrape_papers_on_search_page(driver)
+        scrape_papers_on_search_page(driver, feature_group)
         # Go back to the search page
         driver.get(current_page)
         try:
@@ -119,4 +151,5 @@ def scrape_papers_by_search_link(search_link: str):
 
 
 if __name__ == "__main__":
-    scrape_papers_by_search_link(search_link)
+    feature_group = initialize_feature_group()
+    scrape_papers_by_search_link(search_link, feature_group)
