@@ -66,7 +66,9 @@ def save_papers_to_feature_group(feature_group: fg.FeatureGroup, papers: list[Pa
 def initialize_driver() -> webdriver.Remote:
     if is_ci_env:
         service = Service(executable_path="/usr/local/bin/chromedriver")
-        driver = webdriver.Chrome(service=service)
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--remote-debugging-port=9222')
+        driver = webdriver.Chrome(service=service, options=chrome_options)
     else:
         driver = webdriver.Chrome()
     return driver
