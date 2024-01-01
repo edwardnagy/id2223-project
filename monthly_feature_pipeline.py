@@ -8,8 +8,26 @@ import hopsworks
 from hsfs import feature_group as fg
 import pandas as pd
 
-# TODO: Set search link to search for last month's papers
-search_link = "https://dl.acm.org/topic/ccs2012/10010147.10010257.10010258.10010259.10010263?expand=all&EpubDate=%5B20230101+TO+202401012359%5D&queryID=54/6448494997&pageSize=50&startPage=0&sortBy=EpubDate_asc"
+
+def get_past_month_search_link():
+    # Get the current date
+    today = date.today()
+    # Get the first day of the previous month
+    if today.month == 1:
+        first_day_of_previous_month = today.replace(
+            year=today.year - 1, month=12, day=1
+        )
+    else:
+        first_day_of_previous_month = today.replace(month=today.month - 1, day=1)
+    # Get the search link for the past month
+    search_link = (
+        "https://dl.acm.org/topic/ccs2012/10010147.10010257.10010258.10010259.10010263?expand=all&EpubDate=%5B"
+        + first_day_of_previous_month.strftime("%Y%m%d")
+        + "+TO+"
+        + today.strftime("%Y%m%d")
+        + "2359%5D&queryID=54/6448494997&pageSize=50&startPage=0&sortBy=EpubDate_asc"
+    )
+    return search_link
 
 
 class Paper:
@@ -152,4 +170,5 @@ def scrape_papers_by_search_link(search_link: str, feature_group: fg.FeatureGrou
 
 if __name__ == "__main__":
     feature_group = initialize_feature_group()
+    search_link = get_past_month_search_link()
     scrape_papers_by_search_link(search_link, feature_group)
