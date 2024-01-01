@@ -14,6 +14,12 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
+            - uses: browser-actions/setup-chrome@v1
+              with:
+                chrome-version: 114
+            - uses: nanasess/setup-chromedriver@v2
+              with:
+                chromedriver-version: '114.0.5735.90'
             - name: Cache dependencies
               uses: actions/cache@v3
               with:
