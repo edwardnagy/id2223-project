@@ -21,15 +21,15 @@ def initialize_feature_group():
 
 
 def initialize_driver() -> webdriver.Remote:
-    # if is_ci_env:
-    #     service = Service(executable_path="/usr/local/bin/chromedriver")
-    #     chrome_options = webdriver.ChromeOptions()
-    #     chrome_options.add_argument('--remote-debugging-port=9222')
-    #     chrome_options.add_argument('--disable-gpu')
-    #     chrome_options.add_argument('--headless')
-    #     driver = webdriver.Chrome(service=service, options=chrome_options)
-    # else:
-    driver = webdriver.Chrome()
+    if is_ci_env:
+        service = Service(executable_path="/usr/local/bin/chromedriver")
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--remote-debugging-port=9222')
+        chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument('--headless')
+        driver = webdriver.Chrome(service=service, options=chrome_options)
+    else:
+        driver = webdriver.Chrome()
     return driver
 
 
