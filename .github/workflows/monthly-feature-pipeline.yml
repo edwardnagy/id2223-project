@@ -14,12 +14,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
-            - uses: browser-actions/setup-chrome@v1
-              with:
-                chrome-version: 114
             - uses: nanasess/setup-chromedriver@v2
-              with:
-                chromedriver-version: '114.0.5735.90'
             - name: Cache dependencies
               uses: actions/cache@v3
               with:
@@ -34,7 +29,5 @@ jobs:
               run: |
                 pip install -r requirements.txt
             - name: Run pipeline
-              env:
-                CHROME_BIN: ${{ steps.setup-chrome.outputs.chrome-path }}
               run: |
                 python monthly_feature_pipeline.py

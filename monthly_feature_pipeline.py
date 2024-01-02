@@ -13,6 +13,26 @@ import os
 is_ci_env = os.getenv("GITHUB_ACTIONS") == "true"
 
 
+def initialize_feature_group():
+    project = hopsworks.login()
+    fs = project.get_feature_store()
+    acm_papers_fg = fs.get_feature_group("acm_papers", 1)
+    return acm_papers_fg
+
+
+def initialize_driver() -> webdriver.Remote:
+    if is_ci_env:
+        service = Service(executable_path="/usr/local/bin/chromedriver")
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('--remote-debugging-port=9222')
+        chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument('--headless')
+        driver = webdriver.Chrome(service=service, options=chrome_options)
+    else:
+        driver = webdriver.Chrome()
+    return driver
+
+
 def get_past_month_search_link():
     # Get the current date
     today = date.today()
@@ -44,13 +64,6 @@ class Paper:
         return f"Paper(abstract={self.abstract}, publication_date={self.publication_date}, citation={self.citation})"
 
 
-def initialize_feature_group():
-    project = hopsworks.login()
-    fs = project.get_feature_store()
-    acm_papers_fg = fs.get_feature_group("acm_papers", 1)
-    return acm_papers_fg
-
-
 def save_papers_to_feature_group(feature_group: fg.FeatureGroup, papers: list[Paper]):
     print("Saving papers to feature group...")
     papers_data = {
@@ -61,20 +74,6 @@ def save_papers_to_feature_group(feature_group: fg.FeatureGroup, papers: list[Pa
     papers_df = pd.DataFrame(data=papers_data)
     feature_group.insert(papers_df)
     print("Papers saved to feature group!")
-
-
-def initialize_driver() -> webdriver.Remote:
-    if is_ci_env:
-        service = Service(executable_path="/usr/local/bin/chromedriver")
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument('--remote-debugging-port=9222')
-        chrome_options.add_argument('--disable-gpu')
-        chrome_options.add_argument('--headless')
-        chrome_options.binary_location = os.getenv("CHROME_BIN")
-        driver = webdriver.Chrome(service=service, options=chrome_options)
-    else:
-        driver = webdriver.Chrome()
-    return driver
 
 
 def get_abstract_on_paper_page(driver: webdriver.Remote) -> str:
