@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -24,12 +24,14 @@ def initialize_driver() -> webdriver.Remote:
     if is_ci_env:
         service = Service(executable_path="/usr/local/bin/chromedriver")
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument('--remote-debugging-port=9222')
-        chrome_options.add_argument('--disable-gpu')
-        chrome_options.add_argument('--headless')
+        chrome_options.add_argument("--remote-debugging-port=9222")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--headless")
         driver = webdriver.Chrome(service=service, options=chrome_options)
     else:
-        driver = webdriver.Chrome()
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument("--headless")
+        driver = webdriver.Chrome(options=chrome_options)
     return driver
 
 
@@ -44,12 +46,20 @@ def get_past_month_search_link():
     else:
         first_day_of_previous_month = today.replace(month=today.month - 1, day=1)
     # Get the search link for the past month
+    start_date = first_day_of_previous_month
+    end_date = today.replace(day=1) - timedelta(days=1)
+    page_size = 50
+    start_page = 0
     search_link = (
         "https://dl.acm.org/topic/ccs2012/10010147.10010257.10010258.10010259.10010263?expand=all&EpubDate=%5B"
-        + first_day_of_previous_month.strftime("%Y%m%d")
+        + start_date.strftime("%Y%m%d")
         + "+TO+"
-        + today.strftime("%Y%m%d")
-        + "2359%5D&queryID=54/6448494997&pageSize=50&startPage=0&sortBy=EpubDate_asc"
+        + end_date.strftime("%Y%m%d")
+        + "2359%5D&queryID=54/6448494997&pageSize="
+        + str(page_size)
+        + "&startPage="
+        + str(start_page)
+        + "&sortBy=EpubDate_asc"
     )
     return search_link
 
