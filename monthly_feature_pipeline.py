@@ -116,7 +116,7 @@ def get_citation_on_paper_page(driver: webdriver.Remote) -> str:
             By.CSS_SELECTOR,
             'a[data-title="Export Citation"]',
         )
-    export_citation_button.click()
+    driver.execute_script("arguments[0].click();", export_citation_button)
     citation = (
         WebDriverWait(driver, 10)
         .until(EC.visibility_of_element_located((By.CLASS_NAME, "csl-right-inline")))
@@ -183,4 +183,4 @@ def scrape_papers_by_search_link(search_link: str, feature_group: fg.FeatureGrou
 if __name__ == "__main__":
     feature_group = initialize_feature_group()
     search_link = get_past_month_search_link()
-    # scrape_papers_by_search_link(search_link, feature_group)
+    scrape_papers_by_search_link(search_link, feature_group)
