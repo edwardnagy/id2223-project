@@ -183,4 +183,4 @@ def scrape_papers_by_search_link(search_link: str, feature_group: fg.FeatureGrou
 if __name__ == "__main__":
     feature_group = initialize_feature_group()
     search_link = get_past_month_search_link()
-    scrape_papers_by_search_link(search_link, feature_group)
+    # scrape_papers_by_search_link(search_link, feature_group)
