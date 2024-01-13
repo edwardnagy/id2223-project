@@ -260,7 +260,7 @@ def save_clusters(
         datetime.strptime(date_string, "%Y-%m-%d")
         for date_string in df["publication_date"]
     ]
-    clustered_papers_fg = fs.create_feature_group(
+    clustered_papers_fg = fs.get_or_create_feature_group(
         name=fg_name,
         version=1,
         description="Clustered papers",
