@@ -6,3 +6,5 @@ spacy[transformers,lookups]==3.7.2
 scikit-learn==1.3.2
 matplotlib==3.8.2
 seaborn==0.13.1
+hopsworks==3.4.3
+bokeh==1.4.0
