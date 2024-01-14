@@ -20,5 +20,6 @@ jobs:
                 cache: 'pip' # caching pip dependencies
             - name: Install dependencies
               run: pip install -r requirements.txt
+            - run: python -m spacy download en_core_web_trf
             - name: Run training pipeline
               run: python training_last_half_year_pipeline.py
