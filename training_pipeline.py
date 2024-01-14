@@ -7,8 +7,6 @@ from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 import spacy
-import spacy_transformers
-from spacy.cli import download
 from spacy.lang.en import STOP_WORDS
 from tqdm import tqdm
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -56,8 +54,6 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
         if word not in stop_words:
             stop_words.append(word)
 
-    # Download English words for spaCy
-    download("en_core_web_trf")
     parser = spacy.load("en_core_web_trf", disable=["tagger", "ner"])
 
     def spacy_tokenizer(sentence):

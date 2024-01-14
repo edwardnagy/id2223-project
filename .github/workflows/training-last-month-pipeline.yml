@@ -1,6 +1,8 @@
-name: Training Last Half Year Pipeline
+# TODO: Cache en_core_web_trf
+name: Training Last Month Pipeline
 
 on:
+    pull_request:
     workflow_dispatch:
     schedule:
         - cron: '0 6 1 * *'
@@ -9,7 +11,7 @@ env:
     HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
 
 jobs:
-    training-last-half-year-pipeline:
+    training-last-month-pipeline:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
@@ -22,4 +24,4 @@ jobs:
             - name: Download spacy model
               run: python -m spacy download en_core_web_trf
             - name: Run training pipeline
-              run: python training_last_half_year_pipeline.py
+              run: python training_last_month_pipeline.py
