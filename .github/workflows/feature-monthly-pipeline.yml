@@ -1,4 +1,4 @@
-name: Monthly Feature Pipeline
+name: Feature Monthly Pipeline
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ env:
     HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
 
 jobs:
-    monthly-feature-pipeline:
+    feature-monthly-pipeline:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
