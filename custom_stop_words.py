@@ -1,0 +1,20 @@
+custom_stop_words = {
+    'doi', 'preprint', 'copyright', 'peer', 'reviewed', 'org', 'https', 'et', 'al', 'author', 'figure', 
+    'rights', 'reserved', 'permission', 'used', 'using', 'biorxiv', 'medrxiv', 'license', 'fig', 'fig.', 
+    'al.', 'Elsevier', 'PMC', 'CZI',
+    # Specific to Supervised learning with Classification    
+    'supervised', 'data', 'model', 'learning', 'classification', 'method', 'based', 
+    'results', 'performance', 'paper', 'models', 'propose', 'approach', 
+    'task', 'features', 'feature', 'algorithm', 'set', 'dataset', 'datasets', 'network', 'methods',
+    "training", "test", "tests", "train", "trained", "testing", "validation", "validating", "validation", "validations",
+    "loss", "losses", "accuracy", "accuracies", "precision", "precisions", "recall", "recalls", "f1", "f1s", "f1-score", "f1-scores",
+    "classes", "class", "classifications", "classification", "classifier", "classifiers", "label", "labels", "labeled", "labels",
+    "set", "sets", "split", "splits", "splitting", "splitter", "splitters",
+    "machine", "machines", "machine-learning", "machine-learnings",
+    "learning", "learnings", "learn", "learns", "learned", "learner", "learners", "learnt",
+    "experiment", "experiments", "experimental", "experimentally", "experimentation", "experimentations",
+    "complexity", "complexities", "complex",
+    "sample", "samples", "sampling", "sampled", "sampler", "samplers", "samplings",
+    "imbalanced", "target", "targets",
+    "prediction", "weight", "weights",
+}

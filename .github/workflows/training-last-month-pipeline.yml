@@ -1,0 +1,26 @@
+# TODO: Cache en_core_web_trf
+name: Training Last Month Pipeline
+
+on:
+    workflow_dispatch:
+    schedule:
+        - cron: '0 6 1 * *'
+
+env:
+    HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
+
+jobs:
+    training-last-month-pipeline:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v5
+              with:
+                python-version: '3.11.5'
+                cache: 'pip' # caching pip dependencies
+            - name: Install dependencies
+              run: pip install -r requirements.txt
+            - name: Download spacy model
+              run: python -m spacy download en_core_web_trf
+            - name: Run training pipeline
+              run: python training_last_month_pipeline.py

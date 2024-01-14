@@ -16,6 +16,7 @@ from bokeh.layouts import row, layout
 from bokeh.plotting import save
 import re
 from model.cluster_data import ClusterData
+from model.cluster_time_range import ClusterTimeRange
 from plot.callbacks import input_callback, selected_code
 from plot.plot_text import (
     header_with_time_range,
@@ -27,12 +28,6 @@ from plot.plot_text import (
     description_search,
     description_slider,
 )
-
-
-class ClusterTimeRange(Enum):
-    LAST_MONTH = 1
-    LAST_HALF_YEAR = 2
-    LAST_YEAR = 3
 
 
 def get_clusters(time_range: ClusterTimeRange) -> ClusterData:
