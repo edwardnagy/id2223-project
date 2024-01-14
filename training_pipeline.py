@@ -245,7 +245,7 @@ def save_clusters(
         clustered_papers_fg_name = "acm_papers_clustered_last_year"
     # for some reason, the publication_date column is not read as a date column
     df["publication_date"] = [
-        datetime.strptime(date_string, "%Y-%m-%d")
+        datetime.strptime(date_string, "%Y-%m-%d").date()
         for date_string in df["publication_date"]
     ]
     clustered_papers_fg = fs.get_or_create_feature_group(
