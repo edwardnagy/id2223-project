@@ -1,7 +1,6 @@
 name: Plot Last Month Clusters Pipeline
 
 on:
-    pull_request:
     workflow_dispatch:
     schedule:
         - cron: '0 7 1 * *'
@@ -28,6 +27,7 @@ jobs:
               run: |
                 git config --global user.name 'github-actions[bot]'
                 git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+                git pull origin main
                 git add ./docs/clusters_last_month.html
                 git commit -m "Update last month clusters plot"
-                git push -f origin HEAD:feature/plotting-pipelines
+                git push origin main
