@@ -238,18 +238,18 @@ def save_clusters(
 
     # Save clustered papers
     if time_range == ClusterTimeRange.LAST_MONTH:
-        fg_name = "acm_papers_clustered_last_month"
+        clustered_papers_fg_name = "acm_papers_clustered_last_month"
     elif time_range == ClusterTimeRange.LAST_HALF_YEAR:
-        fg_name = "acm_papers_clustered_last_half_year"
+        clustered_papers_fg_name = "acm_papers_clustered_last_half_year"
     elif time_range == ClusterTimeRange.LAST_YEAR:
-        fg_name = "acm_papers_clustered_last_year"
+        clustered_papers_fg_name = "acm_papers_clustered_last_year"
     # for some reason, the publication_date column is not read as a date column
     df["publication_date"] = [
         datetime.strptime(date_string, "%Y-%m-%d")
         for date_string in df["publication_date"]
     ]
     clustered_papers_fg = fs.get_or_create_feature_group(
-        name=fg_name,
+        name=clustered_papers_fg_name,
         version=1,
         description="Clustered papers",
         primary_key=["citation"],
@@ -265,13 +265,13 @@ def save_clusters(
         {"cluster": range(0, len(all_keywords)), "keywords": all_keywords_strings}
     )
     if time_range == ClusterTimeRange.LAST_MONTH:
-        fg_name = "acm_papers_cluster_keywords_last_month"
+        keywords_fg_name = "acm_papers_cluster_keywords_last_month"
     elif time_range == ClusterTimeRange.LAST_HALF_YEAR:
-        fg_name = "acm_papers_cluster_keywords_last_half_year"
+        keywords_fg_name = "acm_papers_cluster_keywords_last_half_year"
     elif time_range == ClusterTimeRange.LAST_YEAR:
-        fg_name = "acm_papers_cluster_keywords_last_year"
+        keywords_fg_name = "acm_papers_cluster_keywords_last_year"
     keywords_fg = fs.get_or_create_feature_group(
-        "acm_papers_cluster_keywords_last_year",
+        name=keywords_fg_name,
         version=1,
         description="The keywords for each cluster",
         primary_key=["cluster"],
