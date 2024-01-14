@@ -2,7 +2,6 @@
 name: Training Last Month Pipeline
 
 on:
-    pull_request:
     workflow_dispatch:
     schedule:
         - cron: '0 6 1 * *'
