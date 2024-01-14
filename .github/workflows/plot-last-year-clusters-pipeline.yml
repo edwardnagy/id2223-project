@@ -1,7 +1,6 @@
 name: Plot Last Year Clusters Pipeline
 
 on:
-    pull_request:
     workflow_dispatch:
     schedule:
         - cron: '0 7 1 * *'
