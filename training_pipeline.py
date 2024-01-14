@@ -56,17 +56,9 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
         if word not in stop_words:
             stop_words.append(word)
 
-    # Check if English words are already downloaded for spaCy
-    try:
-        import en_core_web_trf
-    except ImportError:
-        # Download English words for spaCy
-        download("en_core_web_trf")
-        nlp = spacy.load("en_core_web_trf")
-
-    import en_core_web_trf
-
-    parser = en_core_web_trf.load(disable=["tagger", "ner"])
+    # Download English words for spaCy
+    download("en_core_web_trf")
+    parser = spacy.load("en_core_web_trf", disable=["tagger", "ner"])
 
     def spacy_tokenizer(sentence):
         mytokens = parser(sentence)
