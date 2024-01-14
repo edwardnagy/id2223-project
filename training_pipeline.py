@@ -1,13 +1,14 @@
 from datetime import date, datetime
 import string
-import subprocess
 import hopsworks
 from hsfs.feature import Feature
 import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
+import spacy
 import spacy_transformers
+from spacy.cli import download
 from spacy.lang.en import STOP_WORDS
 from tqdm import tqdm
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -59,11 +60,9 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     try:
         import en_core_web_trf
     except ImportError:
-        # Download the English words for spaCy
-        spacy_english_words_download_command = (
-            "python -m spacy download en_core_web_trf"
-        )
-        subprocess.run(spacy_english_words_download_command.split())
+        # Download English words for spaCy
+        download("en_core_web_trf")
+        nlp = spacy.load("en_core_web_trf")
 
     import en_core_web_trf
 
