@@ -7,6 +7,7 @@ import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
+import spacy_transformers
 from spacy.lang.en import STOP_WORDS
 from tqdm import tqdm
 from sklearn.feature_extraction.text import TfidfVectorizer
