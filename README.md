@@ -6,7 +6,7 @@ The project clusters the literature from the ACM Digital Library on the topic of
 
 The system is built in the form of a Serverless Machine Learning System, where the data is scraped periodically, stored in a feature store (Hopsworks), and then used to form clusters. The results are then saved to the feature store, and visualized in a user interface, which is deployed on GitHub Pages. These steps are run separately on GitHub Actions.
 
-User interface link: https://edwardnagy.github.io/id2223-project
+User interface link: https://edwardnagy.github.io/realtime-literature-clustering
 
 ## Dataset
 
@@ -57,7 +57,7 @@ The user interface provides the following functionality:
 
 ## Results
 
-The user interface can be found at the following link: https://edwardnagy.github.io/id2223-project
+The user interface can be found at the following link: https://edwardnagy.github.io/realtime-literature-clustering
 
 ### Conclusion
 The clusters appear well-separated for the past year, with top keywords relevant to each cluster. However, the clustering is less successful for the last 6 months and last month, due to the limited number of papers in the dataset these periods.
